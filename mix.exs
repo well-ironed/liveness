@@ -4,7 +4,7 @@ defmodule Liveness.MixProject do
   def project do
     [
       app: :liveness,
-      deps: [],
+      deps: deps(),
       description: "A declarative busy wait",
       docs: docs(),
       elixir: "~> 1.7",
@@ -15,6 +15,10 @@ defmodule Liveness.MixProject do
   end
 
   def application, do: []
+
+  defp deps do
+    [{:ex_doc, "~> 0.21.2", only: :dev, runtime: false}]
+  end
 
   defp docs do
     [
