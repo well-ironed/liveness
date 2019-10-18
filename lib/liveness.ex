@@ -1,5 +1,33 @@
 defmodule Liveness do
+  @moduledoc """
+  `Liveness` offers the `eventually` higher-order function, which can be used
+  to specify liveness properties, or to busy-wait for a particular condition.
+  """
+
   defexception [:message]
+
+  @doc """
+  Runs `f` repeatedly until `f` succeeds or the number of `tries` is
+  reached.
+
+  Particular runs are separated in time by an interval of `interval`
+  milliseconds. The interval period begins when the function begins
+  execution. This means that if execution takes longer than `interval`
+  milliseconds, the next try will be attempted immediately after `f` returns.
+
+  A function is deemed to have failed if it returns `false` or `nil` (a falsy
+  value), or if it crashes (exits, raises, or `:erlang.error`s out).
+
+  If the function returns successfully, its return value becomes the value of
+  the call to `eventually`.
+
+  If the function returns a falsy value (`false` or `nil`) upon the last try,
+  then the `Liveness` exception is raised.
+
+  If the function raises an exception upon the last try, this exception is
+  re-raised by `eventually` with the *original* stacktrace.
+
+  """
 
   def eventually(f, tries \\ 250, interval \\ 20) do
     eventually(f, tries, interval, %RuntimeError{}, nil)
@@ -17,9 +45,9 @@ defmodule Liveness do
 
     try do
       case f.() do
-        false ->
+        x when is_nil(x) or false == x ->
           sleep_remaining(started_at, interval)
-          exception = %__MODULE__{message: "function returned false"}
+          exception = %__MODULE__{message: "function returned #{inspect(x)}"}
           eventually(f, tries - 1, interval, exception, nil)
 
         other ->

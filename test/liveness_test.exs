@@ -15,6 +15,12 @@ defmodule LivenessTest do
     end
   end
 
+  test "it raises an exception if fun returns nil" do
+    assert_raise Liveness, "function returned nil", fn ->
+      eventually(fn -> nil end, 2, 20)
+    end
+  end
+
   test "it raises an exception that fun raises" do
     assert_raise ArgumentError, "this is an argument error", fn ->
       eventually(fn -> raise(ArgumentError, "this is an argument error") end, 2, 20)
