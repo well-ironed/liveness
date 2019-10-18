@@ -1,7 +1,7 @@
-# Liveness
+# Liveness [![CircleCI](https://circleci.com/gh/well-ironed/liveness.svg?style=svg)](https://circleci.com/gh/well-ironed/liveness)
+
 A declarative busy wait.
 
-[![CircleCI](https://circleci.com/gh/well-ironed/liveness.svg?style=svg)](https://circleci.com/gh/well-ironed/liveness)
 
 ## Use in tests
 
@@ -60,8 +60,8 @@ eventually(fn -> ... end, 250, 20)
 
 ## Installation
 
-The library is available on hex.pm. You can use it in your project by adding
-it to dependencies:
+The library is [available on hex.pm](https://hex.pm/packages/liveness). You can
+use it in your project by adding it to dependencies:
 
 
 ```elixir
