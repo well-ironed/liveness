@@ -1,7 +1,7 @@
-defmodule EventuallyTest do
+defmodule LivenessTest do
   use ExUnit.Case
 
-  import Eventually
+  import Liveness
 
   test "it returns value immediately if fun neither returns false nor raises" do
     assert eventually(fn -> 123 end) == 123
@@ -10,7 +10,7 @@ defmodule EventuallyTest do
   end
 
   test "it raises an exception if fun returns false" do
-    assert_raise Eventually, "function returned false", fn ->
+    assert_raise Liveness, "function returned false", fn ->
       eventually(fn -> false end, 2, 20)
     end
   end

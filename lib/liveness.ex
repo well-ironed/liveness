@@ -1,16 +1,14 @@
-defmodule Eventually do
-  alias FE.Maybe
-
+defmodule Liveness do
   defexception [:message]
 
   def eventually(f, tries \\ 250, interval \\ 20) do
-    eventually(f, tries, interval, %RuntimeError{}, Maybe.nothing())
+    eventually(f, tries, interval, %RuntimeError{}, nil)
   end
 
   defp eventually(_, 0, _, last_exception, last_stacktrace) do
     case last_stacktrace do
-      :nothing -> raise(last_exception)
-      {:just, stacktrace} -> reraise_or_exit(last_exception, stacktrace)
+      nil -> raise(last_exception)
+      stacktrace -> reraise_or_exit(last_exception, stacktrace)
     end
   end
 
@@ -22,7 +20,7 @@ defmodule Eventually do
         false ->
           sleep_remaining(started_at, interval)
           exception = %__MODULE__{message: "function returned false"}
-          eventually(f, tries - 1, interval, exception, Maybe.nothing())
+          eventually(f, tries - 1, interval, exception, nil)
 
         other ->
           other
@@ -33,11 +31,11 @@ defmodule Eventually do
 
       exception ->
         sleep_remaining(started_at, interval)
-        eventually(f, tries - 1, interval, exception, Maybe.just(__STACKTRACE__))
+        eventually(f, tries - 1, interval, exception, __STACKTRACE__)
     catch
       class, reason ->
         sleep_remaining(started_at, interval)
-        eventually(f, tries - 1, interval, {class, reason}, Maybe.just(__STACKTRACE__))
+        eventually(f, tries - 1, interval, {class, reason}, __STACKTRACE__)
     end
   end
 
