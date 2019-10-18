@@ -50,12 +50,12 @@ By default, `eventually` will attempt to execute the function 250 times, every
 
 So, this:
 ```elixir
-Liveness.eventually(fn -> ... end)
+eventually(fn -> ... end)
 ```
 
 Is equivalent to this:
 ```elixir
-Liveness.eventually(fn -> ... end, 250, 20)
+eventually(fn -> ... end, 250, 20)
 ```
 
 ## Installation
